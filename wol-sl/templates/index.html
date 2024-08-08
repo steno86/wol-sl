@@ -1,0 +1,27 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wake-on-LAN</title>
+</head>
+<body>
+    <h1>Wake-on-LAN</h1>
+    <form action="/add" method="post">
+        <input type="text" name="name" placeholder="Device Name" required>
+        <input type="text" name="mac" placeholder="MAC Address" required>
+        <select name="interface" required>
+            {% for interface in interfaces %}
+            <option value="{{ interface }}">{{ interface }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add Device</button>
+    </form>
+    <ul>
+        {% for device in devices %}
+        <li>{{ device[1] }} ({{ device[2] }}) - <a href="/wake/{{ device[0] }}">Wake Up</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
