@@ -3,3 +3,4 @@ psutil==5.9.5
 wakeonlan==2.1.0
 Flask-Login==0.6.2
 Flask-SQLAlchemy==3.0.4
+Werkzeug==2.0.3
