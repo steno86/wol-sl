@@ -18,10 +18,15 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Funktion zum Ermitteln der Netzwerkschnittstellen
+# Funktion zum Ermitteln der Netzwerkschnittstellen und IP-Adressen
 def get_network_interfaces():
-    interfaces = psutil.net_if_addrs()
-    return list(interfaces.keys())
+    interfaces = {}
+    addrs = psutil.net_if_addrs()
+    for interface_name, interface_addrs in addrs.items():
+        for addr in interface_addrs:
+            if addr.family == socket.AF_INET:
+                interfaces[interface_name] = addr.address
+    return interfaces
 
 # Funktion zum Ermitteln der IP-Adresse eines Interfaces
 def get_ip_address(interface_name):
@@ -43,7 +48,7 @@ def index():
     devices = cursor.fetchall()
     conn.close()
     
-    # Erhalte die verfügbaren Netzwerkschnittstellen
+    # Erhalte die verfügbaren Netzwerkschnittstellen und IP-Adressen
     interfaces = get_network_interfaces()
     
     return render_template('index.html', devices=devices, interfaces=interfaces)

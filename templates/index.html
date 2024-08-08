@@ -12,8 +12,8 @@
         <input type="text" name="name" placeholder="Device Name" required>
         <input type="text" name="mac" placeholder="MAC Address" required>
         <select name="interface" required>
-            {% for interface in interfaces %}
-            <option value="{{ interface }}">{{ interface }}</option>
+            {% for interface_name, ip_address in interfaces.items() %}
+            <option value="{{ interface_name }}">{{ interface_name }} - {{ ip_address }}</option>
             {% endfor %}
         </select>
         <button type="submit">Add Device</button>
