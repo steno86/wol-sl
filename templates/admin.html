@@ -1,31 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin-Bereich</title>
 </head>
 <body>
-    <h1>Admin Panel</h1>
-    <form action="/admin" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <label>
-            <input type="checkbox" name="is_admin"> Admin
-        </label>
-        <label>
-            <input type="checkbox" name="can_add_devices"> Can Add Devices
-        </label>
-        <label>
-            <input type="checkbox" name="can_send_wol"> Can Send WoL
-        </label>
-        <button type="submit">Create User</button>
+    <h1>Admin-Bereich</h1>
+    <h2>Benutzerverwaltung</h2>
+    <form method="POST" action="{{ url_for('add_user') }}">
+        <label for="username">Benutzername:</label>
+        <input type="text" name="username" id="username" required>
+        <label for="password">Passwort:</label>
+        <input type="password" name="password" id="password" required>
+        <label for="can_add_devices">Darf Geräte hinzufügen:</label>
+        <input type="checkbox" name="can_add_devices" id="can_add_devices">
+        <label for="can_send_wol">Darf WOL-Pakete senden:</label>
+        <input type="checkbox" name="can_send_wol" id="can_send_wol">
+        <button type="submit">Benutzer hinzufügen</button>
     </form>
-    <h2>Existing Users</h2>
+
+    <h3>Aktuelle Benutzer</h3>
     <ul>
         {% for user in users %}
-        <li>{{ user.username }} - Admin: {{ user.is_admin }} - Can Add Devices: {{ user.can_add_devices }} - Can Send WoL: {{ user.can_send_wol }}</li>
+            <li>{{ user.username }} - Admin: {{ user.is_admin }} - Darf Geräte hinzufügen: {{ user.can_add_devices }} - Darf WOL senden: {{ user.can_send_wol }}</li>
         {% endfor %}
     </ul>
+
+    <a href="{{ url_for('index') }}">Zurück zur Startseite</a>
 </body>
 </html>
