@@ -40,6 +40,10 @@ def get_ip_address(interface):
     return None
 
 def init_db():
+    # Verzeichnis für die Datenbankdatei sicherstellen
+    if not os.path.exists('instance'):
+        os.makedirs('instance')
+
     with app.app_context():
         db.create_all()
         # Erstelle einen Admin-Benutzer, wenn keiner existiert
