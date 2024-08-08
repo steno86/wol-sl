@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,19 +7,38 @@
 </head>
 <body>
     <h1>Wake-on-LAN</h1>
+
+    <!-- Zeige eine Logout-Schaltfläche -->
+    <p>Angemeldet als: {{ current_user.username }} | <a href="{{ url_for('logout') }}">Logout</a></p>
+
+    <!-- Formular zum Hinzufügen eines neuen Geräts, wenn der Benutzer die Berechtigung hat -->
+    {% if current_user.can_add_devices %}
     <form action="/add" method="post">
-        <input type="text" name="name" placeholder="Device Name" required>
-        <input type="text" name="mac" placeholder="MAC Address" required>
+        <input type="text" name="name" placeholder="Gerätename" required>
+        <input type="text" name="mac" placeholder="MAC-Adresse" required>
         <select name="interface" required>
             {% for interface_name, ip_address in interfaces.items() %}
             <option value="{{ interface_name }}">{{ interface_name }} - {{ ip_address }}</option>
             {% endfor %}
         </select>
-        <button type="submit">Add Device</button>
+        <button type="submit">Gerät hinzufügen</button>
     </form>
+    {% else %}
+    <p>Sie haben keine Berechtigung, neue Geräte hinzuzufügen.</p>
+    {% endif %}
+
+    <!-- Liste der vorhandenen Geräte -->
+    <h2>Verfügbare Geräte</h2>
     <ul>
         {% for device in devices %}
-        <li>{{ device[1] }} ({{ device[2] }}) - <a href="/wake/{{ device[0] }}">Wake Up</a></li>
+        <li>
+            {{ device.name }} ({{ device.mac }} - {{ device.interface }})
+            {% if current_user.can_send_wol %}
+            - <a href="{{ url_for('wake_device', device_id=device.id) }}">Aufwecken</a>
+            {% else %}
+            - Aufwecken nicht erlaubt
+            {% endif %}
+        </li>
         {% endfor %}
     </ul>
 </body>
